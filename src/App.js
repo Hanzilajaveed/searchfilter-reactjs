@@ -1,26 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import 'tachyons';
+
+
+function searchingFor(searchUser){
+  return function(x){
+    return x.name.toLowerCase().includes(searchUser.toLowerCase()) || !searchUser;
+  }
 }
 
-export default App;
+class Apiapp extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoaded: false,
+      searchUser: '',
+    }
+    this.searchHandler = this.searchHandler.bind(this);
+  }
+
+  componentDidMount(){
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          isLoaded: true,
+          items: json,
+        })
+      });
+  }
+
+  searchHandler(event){
+        this.setState({
+            searchUser: event.target.value
+        })
+    }
+
+  render() {
+
+    var { isLoaded, items } = this.state;
+
+    if (!isLoaded) {
+      return <div> Loading... </div>;
+    }
+    else {
+        return (
+          <div className="tc">
+          <input type='text' className="ma4 pa2" onChange={this.searchHandler} value={this.state.searchUser}/>
+          {
+            this.state.items.filter(searchingFor(this.state.searchUser)).map(item =>
+                <div key={item.id}>
+                  <h3> {item.name} </h3>
+                </div>
+            )
+          }
+          </div>
+          
+      );
+    }
+  }
+}
+
+export default Apiapp;
