@@ -51,14 +51,15 @@ class Apiapp extends Component {
 
     addPlayer = (item) =>{
 
-      if( this.state.player_count < 5){
+      console.log(item);
 
-        console.log(item);
       const newItem = item.name;
       const player_value = item.id;
       const isONTheList = this.state.addplayer.includes(item);
+      
 
       if(isONTheList) {
+
         this.setState({
           message: 'This player is already on the list.'
         })
@@ -71,21 +72,22 @@ class Apiapp extends Component {
           player_budget: this.state.player_budget - player_value,
           message: '',
         addplayer: [...prevState.addplayer, item],
+
+
+        // addplayer_value: [...this.state.addplayer.concat(player_value)]
+
+        // addplayer: [...this.state.addplayer.concat(player_value)]
+
       }));
-      }
+        // console.log('id'+player_value);
 
       }
-      else{
-          this.setState({
-          message: 'list is full '
-        })
-      }
-
-      
         console.log("player count",this.state.player_count);
+
        console.log(this.state.addplayer);
     }
 
+    increment 
 
     removeplayer = (item) => {
       // console.log('remove'+value.id);
@@ -97,14 +99,11 @@ class Apiapp extends Component {
       })
 
       this.setState({
-        message: '',
         player_budget: this.state.player_budget + item.id,
-        player_count: this.state.player_count - 1,
 
         addplayer: [...remove_player]
       })
     }
-
 
   render() {
 
@@ -128,7 +127,6 @@ class Apiapp extends Component {
           <div>
           <div>
             <h2> Player Budget: ${player_budget}</h2>
-             
           </div>
           <div className="tc">
             <input type='text' className="ma2 pa2" onChange={this.searchHandler} value={this.state.searchUser}/>

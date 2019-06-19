@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import 'tachyons';
+import  App from './App';
 
 
 function searchingFor(searchUser){
@@ -10,26 +11,18 @@ function searchingFor(searchUser){
   }
 }
 
-class Apiapp extends Component {
+class Fetchdata extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       items: [],
       isLoaded: false,
-      isloggedIn: false,
-      searchUser: '',
-
-      addplayer: [],
-      addplayer_value: [],
       message: '',
-      player_budget: '5000',
-      player_count:0,
-      max_player_value: '5',
-      min_player_value: '0',
+      searchUser: '',
     }
     this.searchHandler = this.searchHandler.bind(this);
-    // this.addPlayer = this.addPlayer.bind(this, item);
+
   }
 
   componentDidMount(){
@@ -43,22 +36,23 @@ class Apiapp extends Component {
       });
   }
 
-  searchHandler(event){
+    searchHandler(event){
         this.setState({
             searchUser: event.target.value
         })
     }
 
-    addPlayer = (item) =>{
+        addPlayer = (item) =>{
 
-      if( this.state.player_count < 5){
+      console.log(item);
 
-        console.log(item);
       const newItem = item.name;
       const player_value = item.id;
       const isONTheList = this.state.addplayer.includes(item);
+      
 
       if(isONTheList) {
+
         this.setState({
           message: 'This player is already on the list.'
         })
@@ -71,69 +65,34 @@ class Apiapp extends Component {
           player_budget: this.state.player_budget - player_value,
           message: '',
         addplayer: [...prevState.addplayer, item],
+
+
+        // addplayer_value: [...this.state.addplayer.concat(player_value)]
+
+        // addplayer: [...this.state.addplayer.concat(player_value)]
+
       }));
-      }
+        // console.log('id'+player_value);
 
       }
-      else{
-          this.setState({
-          message: 'list is full '
-        })
-      }
-
-      
         console.log("player count",this.state.player_count);
+
        console.log(this.state.addplayer);
     }
 
-
-    removeplayer = (item) => {
-      // console.log('remove'+value.id);
-
-      // const player_value = value.id;
-
-      const remove_player = this.state.addplayer.filter(noplayer => {
-        return noplayer !== item;
-      })
-
-      this.setState({
-        message: '',
-        player_budget: this.state.player_budget + item.id,
-        player_count: this.state.player_count - 1,
-
-        addplayer: [...remove_player]
-      })
-    }
-
-
   render() {
 
-    var { isLoaded, items, message, player_budget, player_count } = this.state;
+    var { isLoaded, items } = this.state;
 
     if (!isLoaded) {
       return <div> Loading... </div>;
     }
     else {
-      if(player_count <= 5){
-        // console.log("yes list is full");
-
-      }
-      else if (player_count == 5){
-        // console.log("yes list is not full");
-
-      }
-
-
         return (
-          <div>
-          <div>
-            <h2> Player Budget: ${player_budget}</h2>
-             
-          </div>
           <div className="tc">
             <input type='text' className="ma2 pa2" onChange={this.searchHandler} value={this.state.searchUser}/>
             {
-              this.state.message !== '' && <p className="bg-red">{message}</p>
+              this.state.message !== '' && <p className="bg-red">{this.state.message}</p>
             }
 
             <div>{
@@ -147,29 +106,9 @@ class Apiapp extends Component {
               )
             }</div>
             </div>
-
-            <div>
-
-            <ul>
-            {this.state.addplayer.map((item, index) => (
-              <li key={index}>{item.name} <button className="dib ma2" onClick={this.removeplayer.bind(this,item)}>Remove Player</button></li>
-
-              ))}
-
-            </ul>
-            </div>
-
-            
-
-           
-          </div>
       );
     }
   }
 }
 
-
-
-
-
-export default Apiapp;
+export default Fetchdata;
